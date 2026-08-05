@@ -1,0 +1,65 @@
+import random
+import string
+
+print("1. Random Password Generator")
+print("2. Password Strength Checker")
+option = input("Choose option (1 or 2): ")
+
+if option == "1":
+    keep_generating = "y"
+    while keep_generating.lower() == "y":
+        length = int(input("Enter password length: "))
+        if length < 8:
+            print("Length must be at least 8 characters!")
+        else:
+            all_chars = string.ascii_uppercase + string.ascii_lowercase + string.digits + "!@#$%&*?_"
+            password = "".join(random.choice(all_chars) for _ in range(length))
+            print(f"Generated Password:\n{password}")
+        
+        keep_generating = input("Generate another password? (y/n): ")
+
+elif option == "2":
+    check_again = "y"
+    while check_again.lower() == "y":
+        password = input("Enter your password:\n")
+
+        has_len = len(password) >= 8
+        has_lower = any(c in string.ascii_lowercase for c in password)
+        has_upper = any(c in string.ascii_uppercase for c in password)
+        has_digit = any(c in string.digits for c in password)
+        has_special = any(c in "!@#$%&*?_" for c in password)
+
+        failed_count = 0
+        suggestions = []
+
+        if not has_len:
+            failed_count += 1
+            suggestions.append("- Increase the length to at least 8 characters")
+        if not has_lower:
+            failed_count += 1
+        if not has_upper:
+            failed_count += 1
+            suggestions.append("- Add uppercase letters")
+        if not has_digit:
+            failed_count += 1
+        if not has_special:
+            failed_count += 1
+            suggestions.append("- Add special characters")
+
+        if failed_count >= 3:
+            strength = "Weak"
+        elif failed_count == 2:
+            strength = "Medium"
+        elif failed_count == 1:
+            strength = "Strong"
+        else:
+            strength = "Very strong"
+
+        print(f"Password Strength: {strength}")
+
+        if strength in ["Weak", "Medium"] and suggestions:
+            print("Suggestions:")
+            for s in suggestions:
+                print(s)
+
+        check_again = input("\nDo you want to test another password? (y/n): ")
