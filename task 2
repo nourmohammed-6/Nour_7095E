@@ -1,0 +1,35 @@
+import time
+
+minutes = int(input("Enter test minutes: "))
+seconds = int(input("Enter test seconds: "))
+
+if minutes < 0 or seconds < 0 or seconds > 59 or (minutes == 0 and seconds == 0):
+    print("Invalid test duration.")
+else:
+    total_seconds = (minutes * 60) + seconds
+
+    if total_seconds > 300:
+        print("Safety limit exceeded! Test duration capped to 05:00.")
+        total_seconds = 300
+
+    while total_seconds >= 0:
+        mins = total_seconds // 60
+        secs = total_seconds % 60
+        time_format = f"{mins:02d}:{secs:02d}"
+
+        if total_seconds > 30:
+            status = f"POWER ON | Remaining: {time_format}"
+        elif total_seconds > 10:
+            status = f"STABILIZING SYSTEM | Remaining: {time_format}"
+        else:
+            status = f"COOLDOWN PHASE | Do not touch | {time_format}"
+
+        print(f"\r{status}", end="")
+        
+        if total_seconds == 0:
+            break
+
+        time.sleep(1)
+        total_seconds -= 1
+
+    print("\nPower test completed successfully.")
